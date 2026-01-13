@@ -685,12 +685,13 @@ app.get('/api/health', (req, res) => {
 const path = require('path');
 
 // Serve React frontend
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// React routing fallback
+// React routing fallback (IMPORTANT: after API routes)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
 
 
 app.listen(PORT, async () => {
