@@ -682,6 +682,16 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+const path = require('path');
+
+// Serve React frontend
+app.use(express.static(path.join(__dirname, 'build')));
+
+// React routing fallback
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 
 app.listen(PORT, async () => {
   console.log(`✅ Backend server running on http://localhost:${PORT}`);
