@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -5,7 +7,8 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
+
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -17,9 +20,10 @@ let assessmentsMemory = [];
 // Connect to MongoDB with correct options (MongoDB 8.x compatible)
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb://127.0.0.1:27017/autism-support', {
-      serverSelectionTimeoutMS: 5000
-    });
+   await mongoose.connect(process.env.MONGO_URI, {
+  serverSelectionTimeoutMS: 5000
+});
+
 
     useDatabase = true;
     console.log('✅ MongoDB Connected Successfully');
