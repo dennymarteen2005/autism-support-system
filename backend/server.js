@@ -1,4 +1,12 @@
+/**
+ * ⚠️ PRODUCTION-STABLE BASELINE
+ * This file is DEPLOYED and WORKING on Render.
+ * Do NOT modify existing routes or logic.
+ * Only ADD new features below marked sections.
+ */
+
 require('dotenv').config();
+
 
 const express = require('express');
 const cors = require('cors');
@@ -570,6 +578,10 @@ function generateAccessToken() {
 }
 
 // API Endpoints
+// ===============================
+// CORE ASSESSMENT SYSTEM (STABLE)
+// ===============================
+
 app.post('/api/analyze', async (req, res) => {
   try {
     const { responses, userName, userEmail } = req.body;
