@@ -1,0 +1,118 @@
+/* FULL PAGE */
+.auth-page {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ff9a3c, #ffd166, #ff6b6b);
+  background-size: 300% 300%;
+  animation: gradientMove 8s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* CARD */
+.auth-card {
+  background: white;
+  width: 420px;
+  padding: 40px;
+  border-radius: 18px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from { transform: translateY(25px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* HEADER */
+.auth-header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.auth-header p {
+  margin-top: 8px;
+  color: #666;
+}
+
+/* FORM */
+.auth-form {
+  margin-top: 25px;
+}
+
+.input-group {
+  margin-bottom: 18px;
+}
+
+.input-group label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.input-group input {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #ff8c42;
+  box-shadow: 0 0 0 3px rgba(255,140,66,0.2);
+}
+
+/* BUTTON */
+.auth-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff8c42, #ff5e62);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.2s;
+}
+
+.auth-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* BACK BUTTON */
+.auth-back {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px solid #ff8c42;
+  background: transparent;
+  color: #ff8c42;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.auth-back:hover {
+  background: #ff8c42;
+  color: white;
+}
+
+/* ERROR */
+.auth-error {
+  color: #e53935;
+  margin-top: 8px;
+  font-size: 14px;
+}
