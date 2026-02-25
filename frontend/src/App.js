@@ -197,29 +197,35 @@ const analyzeWithBackend = async () => {
     const auth = JSON.parse(localStorage.getItem('auth'));
     const token = auth?.token;
 
-    console.log('JWT being sent:', token); // 🔍 DEBUG
+    const API =
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:5000'
+        : '';
 
-    const response = await fetch(
-      'http://localhost:5000/api/analyze',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token && { Authorization: `Bearer ${token}` })
-        },
-        body: JSON.stringify({
-          responses,
-          userName: userName || 'Anonymous',
-          userEmail: userEmail || null
-        })
-      }
-    );
+    const response = await fetch(`${API}/api/analyze`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token && { Authorization: `Bearer ${token}` })
+      },
+      body: JSON.stringify({
+        responses,
+        userName: userName || 'Anonymous',
+        userEmail: userEmail || null
+      })
+    });
 
-    const data = await response.json();
-    console.log('Analyze response:', data);
+    const text = await response.text();
+    let data;
 
-    if (!data.success) {
-      throw new Error('Analysis failed');
+    try {
+      data = JSON.parse(text);
+    } catch {
+      throw new Error('Invalid JSON from server');
+    }
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.error || 'Analysis failed');
     }
 
     setAnalysisResult(data);
@@ -232,7 +238,6 @@ const analyzeWithBackend = async () => {
     setLoading(false);
   }
 };
-
 const startQuestionnaire = () => {
   if (!userName.trim()) {
     alert('Please enter your name to continue');
