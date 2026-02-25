@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import { useAuth } from './AuthContext';
-import './Auth.css';   // 👈 new CSS file
+import './Auth.css';
 
 function Login({ onBack, onSuccess }) {
   const { login } = useAuth();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // ✅ API base URL (auto switches for production)
+  const API =
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:5000'
+      : '';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,25 +22,37 @@ function Login({ onBack, onSuccess }) {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/login', {
+      const res = await fetch(`${API}/api/auth/login`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ email, password })
       });
 
-      const data = await res.json();
+      // ✅ Handle non-JSON responses safely
+      const text = await res.text();
+      let data;
 
-      if (!data.success) {
-        setError(data.error || 'Login failed');
-        setLoading(false);
-        return;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error('Server returned invalid response');
       }
 
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Login failed');
+      }
+
+      // ✅ Save login in context
       login(data.user, data.token);
+
+      // ✅ Navigate after login
       if (onSuccess) onSuccess();
 
     } catch (err) {
-      setError('Server error');
+      console.error('Login error:', err);
+      setError(err.message || 'Server error');
     } finally {
       setLoading(false);
     }
@@ -56,7 +75,7 @@ function Login({ onBack, onSuccess }) {
               type="email"
               placeholder="Enter your email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -67,7 +86,7 @@ function Login({ onBack, onSuccess }) {
               type="password"
               placeholder="Enter your password"
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
@@ -78,21 +97,25 @@ function Login({ onBack, onSuccess }) {
             {loading ? 'Logging in...' : 'Login'}
           </button>
 
-<div style={{ display:'flex', gap:'10px', marginTop:'12px' }}>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
 
-  <button type="button" onClick={onBack} className="auth-back">
-    ← Back
-  </button>
+            <button
+              type="button"
+              onClick={onBack}
+              className="auth-back"
+            >
+              ← Back
+            </button>
 
-  <button
-    type="button"
-    onClick={() => window.dispatchEvent(new Event('goRegister'))}
-    className="auth-back"
-  >
-    Create Account
-  </button>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new Event('goRegister'))}
+              className="auth-back"
+            >
+              Create Account
+            </button>
 
-</div>
+          </div>
 
         </form>
       </div>
